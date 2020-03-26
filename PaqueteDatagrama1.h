@@ -9,7 +9,7 @@ public:
     PaqueteDatagrama1(char *,unsigned int , char*,int);
     PaqueteDatagrama1(unsigned int );
     ~PaqueteDatagrama1();
-    char *getAddr();
+    char *getAddress();
     unsigned int getLen();
     int getPort();
     char *getData();
