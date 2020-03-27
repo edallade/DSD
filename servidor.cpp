@@ -11,7 +11,7 @@ int main(){
     char texto_s[35]= "Hola cliente recibi tu mensaje";
 
     PaqueteDatagrama1 recibi_de_cliente(50);
-    PaqueteDatagrama1 mensaje_a_cliente(texto_s, strlen(texto_s), "127.0.0.1", servidor.getPuerto());
+    PaqueteDatagrama1 mensaje_a_cliente(texto_s, strlen(texto_s), "192.168.0.5", servidor.getPuerto());
 
     while(true){
         servidor.recibe(recibi_de_cliente);

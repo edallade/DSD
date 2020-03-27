@@ -39,11 +39,14 @@ SocketDatagrama::SocketDatagrama(int port){
         bind(s,(struct sockaddr *)&DirLocal,sizeof(DirLocal));
 
 }
+SocketDatagrama::~SocketDatagrama(){
+    
+}
 int SocketDatagrama::recibe(PaqueteDatagrama1 & p){
    
     char * d = new char[p.getLen()+1];
     unsigned int clilen = sizeof(DirForanea);
-    int ret = recvfrom(s,(char *)&p.getData,p.getLen()*sizeof(char),0,(struct sockaddr *)&DirForanea,&clilen);
+    int ret = recvfrom(s,(char *) p.getData(),p.getLen()*sizeof(char),0,(struct sockaddr *)&DirForanea,&clilen);
     cout << "Recibi de la dirección: " << inet_ntoa(DirForanea.sin_addr) << " y puerto: " << ntohs(DirForanea.sin_port) << endl;
     p.setIp(inet_ntoa(DirForanea.sin_addr));
     p.setPort(ntohs(DirForanea.sin_port));
