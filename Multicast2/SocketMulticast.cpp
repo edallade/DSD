@@ -26,23 +26,32 @@ SocketMulticast::SocketMulticast(int port){
 
 SocketMulticast::SocketMulticast(int port, unsigned char TLL){
     //unsigned char f = CM;
-
+    int reuse = 1;
     s = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if(setsockopt(s,IPPROTO_IP, IP_MULTICAST_TTL,(void *)&TLL,sizeof(TLL))<0){
         cout<<"error al crear socket del emisor"<<endl;
         exit(0);
         }
+    if(setsockopt(s,SOL_SOCKET,SO_REUSEPORT,&reuse,sizeof(reuse))<0){
+        cout<<"Error al confugurar puerto reusable"<<endl;
+        }
     }
 
-    int SocketMulticast::recibe(PaqueteDatagrama1 &p){
-        
+    PaqueteDatagrama1 SocketMulticast::recibe(PaqueteDatagrama1 &p,int pto){
+        int n[2],r[1];
         unsigned int len = sizeof(direccionForanea);
-        int salida = recvfrom(s, (char*) p.getData(), p.getLen() * sizeof(char), 0, (struct sockaddr*) &direccionForanea, &len);
+        int salida = recvfrom(s, (char*) p.getData(), p.getLen() * sizeof(int), 0, (struct sockaddr*) &direccionForanea, &len);
         cout << "Recibi de la dirección: " << inet_ntoa(direccionForanea.sin_addr) << " y puerto: " << ntohs(direccionForanea.sin_port) << endl;
-        cout<< "Cadena recibida :"<<p.getData()<<endl; 
-        p.setIp(inet_ntoa(direccionForanea.sin_addr));
-        p.setPort(ntohs(direccionForanea.sin_port));
-        return salida;
+       memcpy(n,p.getData(),sizeof(n));
+        r[0]= n[0]+n[1];
+       std::cout<<n[0]<<"+"<<n[1]<<"="<<r[0]<<endl;
+      PaqueteDatagrama1  aux(p.getLen());
+        memcpy(aux.getData(),(char *)&r[0],sizeof(r));
+        aux.setIp(inet_ntoa(direccionForanea.sin_addr));
+          cout<<"esperando fffff"<<endl;
+        aux.setPort(ntohs(pto));
+         cout<<"esperando fffffx2"<<endl;
+        return aux;
     }
 
     int SocketMulticast::envia(PaqueteDatagrama1 &p, unsigned char ttl){
@@ -50,7 +59,7 @@ SocketMulticast::SocketMulticast(int port, unsigned char TLL){
         direccionForanea.sin_family = AF_INET;
         direccionForanea.sin_addr.s_addr = inet_addr(p.getAddress());
         direccionForanea.sin_port = htons( p.getPort() );
-        return sendto(s, (char *)p.getData(), p.getLen() * sizeof(char), 0, (struct sockaddr *) &direccionForanea, sizeof(direccionForanea));
+        return sendto(s, (char *)p.getData(), p.getLen() * sizeof(int), 0, (struct sockaddr *) &direccionForanea, sizeof(direccionForanea));
     }
 
     void SocketMulticast::unisrseGrupo(char * multicastIp){

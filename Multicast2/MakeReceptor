@@ -1,0 +1,9 @@
+receptor: receptor.cpp SocketMulticast.o SocketDatagrama.o PaqueteDatagrama1.o
+	g++ receptor.cpp SocketMulticast.o SocketDatagrama.o PaqueteDatagrama1.o -o receptor
+	rm *.o
+SocketMulticast.o: SocketMulticast.cpp SocketMulticast.h
+	g++ SocketMulticast.cpp SocketMulticast.h -c
+SocketDatagrama.o: SocketDatagrama.cpp SocketDatagrama.h
+	g++ SocketDatagrama.cpp -c
+PaqueteDatagrama1.o: PaqueteDatagrama1.cpp PaqueteDatagrama1.h
+	g++ PaqueteDatagrama1.cpp -c
