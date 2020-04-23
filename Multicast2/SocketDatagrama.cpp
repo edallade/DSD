@@ -80,7 +80,7 @@ int SocketDatagrama::envia(PaqueteDatagrama1 & p){
          cout<<"enviando a "<<p.getAddress()<<":"<<p.getPort()<<endl;
     DirForanea.sin_family = AF_INET;
     DirForanea.sin_addr.s_addr = inet_addr(p.getAddress());
-   	DirForanea.sin_port = htons(7000 );
+   	DirForanea.sin_port = htons(p.getPort());
       return sendto(s, (char*) p.getData(), p.getLen() , 0, (struct sockaddr*) &DirForanea, sizeof(DirForanea));
 
 }

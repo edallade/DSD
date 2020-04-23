@@ -4,3 +4,5 @@ DDRM/servidor
 DDRM/Respuesta.o
 DDRM/SocketDatagrama.o
 Multicast_ver4.pdf
+Multicast2/SocketMulticast.h.gch
+

@@ -49,7 +49,7 @@ SocketMulticast::SocketMulticast(int port, unsigned char TLL){
         memcpy(aux.getData(),(char *)&r[0],sizeof(r));
         aux.setIp(inet_ntoa(direccionForanea.sin_addr));
           cout<<"esperando fffff"<<endl;
-        aux.setPort(ntohs(pto));
+        aux.setPort(pto);
          cout<<"esperando fffffx2"<<endl;
         return aux;
     }
