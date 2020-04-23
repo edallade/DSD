@@ -1,4 +1,4 @@
-class PaqueteDatagrama1
+ class PaqueteDatagrama1
 {
 private:
     char *datos;
