@@ -10,22 +10,22 @@
 
 PaqueteDatagrama1::PaqueteDatagrama1(char *data,unsigned int sizeChar, char* address,int port)
 {
-    datos= new char [sizeChar+1];
+    datos= new char [sizeChar];
     longitud=sizeChar;
-    //copiar datos ingresados en el objeto  
     memcpy(datos,data,longitud);
     memcpy(ip,address,sizeof(ip));
     puerto=port;
 }
 PaqueteDatagrama1::PaqueteDatagrama1(unsigned int sizeChar)
 {
-    datos = new char[sizeChar+1];
-    datos[0]=0;
+    datos = new char[sizeChar];
     longitud=sizeChar;
 }
 
 PaqueteDatagrama1::~PaqueteDatagrama1(){
     delete [] datos;
+    longitud = 0;
+    puerto = 0;
 }
 
 
@@ -46,11 +46,11 @@ char * PaqueteDatagrama1::getData(){
 }
 
 void PaqueteDatagrama1::setData(char * data){
-    memcpy(datos,data,strlen(data));
+    memcpy(datos,data,longitud);
 }
 
 void PaqueteDatagrama1::setIp(char * address){
-    memcpy(ip,address,strlen(address));
+    memcpy(ip,address,16);
 }
 
 void PaqueteDatagrama1::setPort(int port){

@@ -7,8 +7,8 @@ int main(){
    {    
      
      //std::cout<<"\n";
-     replay =  servidor.getRequest();
-     servidor.sendReply(replay);
+      servidor.getRequest();
+     //servidor.sendReply(replay);
    }
   
     
