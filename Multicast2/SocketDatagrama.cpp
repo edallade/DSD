@@ -57,11 +57,11 @@ int SocketDatagrama::RecibeTimeout(PaqueteDatagrama1 &p, time_t seg, suseconds_t
         p.setIp(inet_ntoa(DirForanea.sin_addr));
         p.setPort(ntohs(DirForanea.sin_port));
         cout<<"Respuesta de "<<p.getAddress()<<":"<<p.getPort()<<endl;
-        return numeros[1];
+        return numeros[0];
      }
      else{
          if(errno==EWOULDBLOCK){
-            cout<<"Tiempo de espera de respuesta excedido\n";
+         //   cout<<"Tiempo de espera de respuesta excedido\n";
              return -1;
          }
          else
