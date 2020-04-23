@@ -13,6 +13,10 @@
 using namespace std;
 
 SocketMulticast::SocketMulticast(int port){
+<<<<<<< HEAD
+=======
+     u_int yes = 1;   
+>>>>>>> cc9ddd8a56d8fdf3707c5b3fc98c1ea803ed9757
     s = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
     
     bzero((char *)&direccionLocal,sizeof(direccionLocal));
@@ -24,6 +28,7 @@ SocketMulticast::SocketMulticast(int port){
     bind(s,(struct sockaddr *)&direccionLocal,sizeof(direccionLocal));
     }
 
+<<<<<<< HEAD
 SocketMulticast::SocketMulticast(int port, unsigned char TLL){
     //unsigned char f = CM;
 
@@ -32,6 +37,25 @@ SocketMulticast::SocketMulticast(int port, unsigned char TLL){
         cout<<"error al crear socket del emisor"<<endl;
         exit(0);
         }
+=======
+SocketMulticast::SocketMulticast(int port, unsigned char CM){
+    unsigned char f = CM;
+
+    s = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if(setsockopt(s,IPPROTO_IP, IP_MULTICAST_TTL,(void *)&f,sizeof(f))<0){
+        cout<<"error al crear socket del emisor"<<endl;
+        exit(0);
+    }
+  
+    
+    bzero((char *)&direccionLocal,sizeof(direccionLocal));
+
+    direccionLocal.sin_family = AF_INET;
+    direccionLocal.sin_addr.s_addr=INADDR_ANY;
+    direccionLocal.sin_port = htons(port);
+    
+   // bind(s,(struct sockaddr *)&direccionLocal,sizeof(direccionLocal));
+>>>>>>> cc9ddd8a56d8fdf3707c5b3fc98c1ea803ed9757
     }
 
     int SocketMulticast::recibe(PaqueteDatagrama1 &p){
