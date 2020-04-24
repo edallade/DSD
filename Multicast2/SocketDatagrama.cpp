@@ -26,7 +26,9 @@ SocketDatagrama::SocketDatagrama(int port){
         bzero((char*)&DirLocal,sizeof(DirLocal));
         DirLocal.sin_family=AF_INET;
         DirLocal.sin_addr.s_addr=INADDR_ANY;
-        DirLocal.sin_port=htons(port);
+        if(port ==0)
+            port =-1;
+        DirLocal.sin_port=htons(port+1);
 
         bind(s,(struct sockaddr *)&DirLocal,sizeof(DirLocal));
 

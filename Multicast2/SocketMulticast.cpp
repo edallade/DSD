@@ -13,7 +13,11 @@
 using namespace std;
 
 SocketMulticast::SocketMulticast(int port){
+    int reuse =1;
     s = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if(setsockopt(s,SOL_SOCKET,SO_REUSEPORT,&reuse,sizeof(reuse))<0){
+    cout<<"Error al confugurar puerto reusable"<<endl;
+    }
     
     bzero((char *)&direccionLocal,sizeof(direccionLocal));
 
@@ -26,14 +30,11 @@ SocketMulticast::SocketMulticast(int port){
 
 SocketMulticast::SocketMulticast(int port, unsigned char TLL){
     //unsigned char f = CM;
-    int reuse = 1;
+    
     s = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if(setsockopt(s,IPPROTO_IP, IP_MULTICAST_TTL,(void *)&TLL,sizeof(TLL))<0){
         cout<<"error al crear socket del emisor"<<endl;
         exit(0);
-        }
-    if(setsockopt(s,SOL_SOCKET,SO_REUSEPORT,&reuse,sizeof(reuse))<0){
-        cout<<"Error al confugurar puerto reusable"<<endl;
         }
     }
 
@@ -49,7 +50,7 @@ SocketMulticast::SocketMulticast(int port, unsigned char TLL){
         memcpy(aux.getData(),(char *)&r[0],sizeof(r));
         aux.setIp(inet_ntoa(direccionForanea.sin_addr));
           cout<<"esperando fffff"<<endl;
-        aux.setPort(pto);
+        aux.setPort(pto+1);
          cout<<"esperando fffffx2"<<endl;
         return aux;
     }
@@ -59,7 +60,7 @@ SocketMulticast::SocketMulticast(int port, unsigned char TLL){
         direccionForanea.sin_family = AF_INET;
         direccionForanea.sin_addr.s_addr = inet_addr(p.getAddress());
         direccionForanea.sin_port = htons( p.getPort() );
-        cout<<"enviando a"<<p.getAddress()<<":"<<p.getPort()<<endl;
+       
         return sendto(s, (char *)p.getData(), p.getLen() * sizeof(int), 0, (struct sockaddr *) &direccionForanea, sizeof(direccionForanea));
     }
 

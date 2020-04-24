@@ -18,7 +18,7 @@ int main(int argc, char * argv[]){
    
     receptor.unisrseGrupo(argv[1]);
    PaqueteDatagrama1 pIn = receptor.recibe(rec,puerto);
-   cout<<"port to send"<<pIn.getPort()<<endl;
+   cout<<"port to send unicast message: "<<pIn.getPort()<<endl;
     SocketDatagrama receptor_unicast(0);
     receptor_unicast.envia(pIn);
     receptor.salirseGrupo(argv[1]);

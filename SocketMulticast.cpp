@@ -29,8 +29,6 @@ SocketMulticast::SocketMulticast(int port){
     }
 
 SocketMulticast::SocketMulticast(int port, unsigned char TTL){
-    //unsigned char f = CM;
-
     s = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
      if(setsockopt(s,IPPROTO_IP, IP_MULTICAST_TTL,(void *)&TTL,sizeof(TTL))<0){
         cout<<"error al crear socket del emisor"<<endl;

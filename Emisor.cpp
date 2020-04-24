@@ -22,7 +22,6 @@ int main (int argc, char * argv []){
     while (1)
     {
         emisor.envia(p,tll);
-        //emisor.~SocketMulticast();
     }
     
     
