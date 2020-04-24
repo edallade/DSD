@@ -16,7 +16,7 @@ int main (int argc, char * argv []){
      menLen = strlen(mensaje);
     puerto = atoi(argv[2]);
      cout<<argv[3]<<":"<<puerto<<endl;
-    SocketMulticast emisor(puerto);
+    SocketMulticast emisor(puerto,1);
     PaqueteDatagrama1 p(mensaje,menLen,argv[1],puerto);
 
     while (1)

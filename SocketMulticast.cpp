@@ -14,27 +14,28 @@ using namespace std;
 
 SocketMulticast::SocketMulticast(int port){
     s = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    u_int yes =1;
+    int yes =1;
+     if (setsockopt(s, SOL_SOCKET, SO_REUSEPORT, &yes, sizeof(yes)) < 0) {
+             perror("reuseaddr setsockopt");
+         exit(1);
+     }
     bzero((char *)&direccionLocal,sizeof(direccionLocal));
 
     direccionLocal.sin_family = AF_INET;
     direccionLocal.sin_addr.s_addr=INADDR_ANY;
     direccionLocal.sin_port = htons(port);
 
-    /* if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) < 0) {
-             perror("reuseaddr setsockopt");
-         exit(1);
-     }*/
-     
-    
     bind(s,(struct sockaddr *)&direccionLocal,sizeof(direccionLocal));
     }
 
-SocketMulticast::SocketMulticast(int port, unsigned char TLL){
+SocketMulticast::SocketMulticast(int port, unsigned char TTL){
     //unsigned char f = CM;
 
     s = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
-   
+     if(setsockopt(s,IPPROTO_IP, IP_MULTICAST_TTL,(void *)&TTL,sizeof(TTL))<0){
+        cout<<"error al crear socket del emisor"<<endl;
+        exit(0);
+        }
     }
 
 SocketMulticast::~SocketMulticast(){}
@@ -52,10 +53,7 @@ SocketMulticast::~SocketMulticast(){}
     }
 
     int SocketMulticast::envia(PaqueteDatagrama1 &p, unsigned char ttl){
-         if(setsockopt(s,IPPROTO_IP, IP_MULTICAST_TTL,(void *)&ttl,sizeof(ttl))<0){
-        cout<<"error al crear socket del emisor"<<endl;
-        exit(0);
-        }
+        
         bzero((char *)&direccionForanea, sizeof(direccionForanea));
         direccionForanea.sin_family = AF_INET;
         direccionForanea.sin_addr.s_addr = inet_addr(p.getAddress());
