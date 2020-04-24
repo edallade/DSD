@@ -11,8 +11,9 @@ private:
     struct sockaddr_in direccionLocal;
     struct sockaddr_in direccionForanea; 
 public:
-    SocketMulticast(int);
+    SocketMulticast(char *,int);
     SocketMulticast(int , unsigned char);
+    ~SocketMulticast();
     int recibe(PaqueteDatagrama1 & p);
     int envia(PaqueteDatagrama1 & p, unsigned char ttl);
     void unisrseGrupo(char *);

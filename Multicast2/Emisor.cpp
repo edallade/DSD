@@ -28,7 +28,7 @@ int main (int argc, char * argv []){
     {
         emisor.envia(pOut,tll);
       
-        r = emisor_unicast.RecibeTimeout(pIn,1,0);
+        r = emisor_unicast.RecibeTimeout(pIn,2,0);
         if(r!=-1){
             cout<<"el resultado es"<<r<<endl;
            r=-1;

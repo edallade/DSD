@@ -12,14 +12,20 @@
 
 using namespace std;
 
-SocketMulticast::SocketMulticast(int port){
+SocketMulticast::SocketMulticast(char * ip, int port){
     s = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    
+    u_int yes =1;
     bzero((char *)&direccionLocal,sizeof(direccionLocal));
 
     direccionLocal.sin_family = AF_INET;
     direccionLocal.sin_addr.s_addr=INADDR_ANY;
     direccionLocal.sin_port = htons(port);
+
+    /* if (setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) < 0) {
+             perror("reuseaddr setsockopt");
+         exit(1);
+     }*/
+     
     
     bind(s,(struct sockaddr *)&direccionLocal,sizeof(direccionLocal));
     }
@@ -33,6 +39,9 @@ SocketMulticast::SocketMulticast(int port, unsigned char TLL){
         exit(0);
         }
     }
+
+SocketMulticast::~SocketMulticast(){}
+
 
     int SocketMulticast::recibe(PaqueteDatagrama1 &p){
         

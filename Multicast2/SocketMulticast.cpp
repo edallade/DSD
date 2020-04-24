@@ -59,6 +59,7 @@ SocketMulticast::SocketMulticast(int port, unsigned char TLL){
         direccionForanea.sin_family = AF_INET;
         direccionForanea.sin_addr.s_addr = inet_addr(p.getAddress());
         direccionForanea.sin_port = htons( p.getPort() );
+        cout<<"enviando a"<<p.getAddress()<<":"<<p.getPort()<<endl;
         return sendto(s, (char *)p.getData(), p.getLen() * sizeof(int), 0, (struct sockaddr *) &direccionForanea, sizeof(direccionForanea));
     }
 

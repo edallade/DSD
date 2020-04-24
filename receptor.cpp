@@ -12,9 +12,14 @@ int main(int argc, char * argv[]){
     int puerto;
     puerto = atoi(argv[2]);
     PaqueteDatagrama1 rec((unsigned int)100);
-    SocketMulticast receptor(puerto);
+    SocketMulticast receptor(argv[1],puerto);
     receptor.unisrseGrupo(argv[1]);
-    cout<<receptor.recibe(rec)<<"bytes recibidos"<<endl;
+    while (1)
+    {
+  cout<<receptor.recibe(rec)<<"bytes recibidos"<<endl;
+    }
+    
+    
 
     receptor.salirseGrupo(argv[1]);
      return(0);
