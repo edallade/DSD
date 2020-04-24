@@ -12,7 +12,7 @@ int main(int argc, char * argv[]){
     int puerto;
     puerto = atoi(argv[2]);
     PaqueteDatagrama1 rec((unsigned int)100);
-    SocketMulticast receptor(argv[1],puerto);
+    SocketMulticast receptor(puerto);
     receptor.unisrseGrupo(argv[1]);
     while (1)
     {

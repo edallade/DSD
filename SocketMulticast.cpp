@@ -12,7 +12,7 @@
 
 using namespace std;
 
-SocketMulticast::SocketMulticast(char * ip, int port){
+SocketMulticast::SocketMulticast(int port){
     s = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
     u_int yes =1;
     bzero((char *)&direccionLocal,sizeof(direccionLocal));
@@ -34,10 +34,7 @@ SocketMulticast::SocketMulticast(int port, unsigned char TLL){
     //unsigned char f = CM;
 
     s = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    if(setsockopt(s,IPPROTO_IP, IP_MULTICAST_TTL,(void *)&TLL,sizeof(TLL))<0){
-        cout<<"error al crear socket del emisor"<<endl;
-        exit(0);
-        }
+   
     }
 
 SocketMulticast::~SocketMulticast(){}
@@ -55,6 +52,10 @@ SocketMulticast::~SocketMulticast(){}
     }
 
     int SocketMulticast::envia(PaqueteDatagrama1 &p, unsigned char ttl){
+         if(setsockopt(s,IPPROTO_IP, IP_MULTICAST_TTL,(void *)&ttl,sizeof(ttl))<0){
+        cout<<"error al crear socket del emisor"<<endl;
+        exit(0);
+        }
         bzero((char *)&direccionForanea, sizeof(direccionForanea));
         direccionForanea.sin_family = AF_INET;
         direccionForanea.sin_addr.s_addr = inet_addr(p.getAddress());
