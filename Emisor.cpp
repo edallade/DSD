@@ -16,13 +16,13 @@ int main (int argc, char * argv []){
      menLen = strlen(mensaje);
     puerto = atoi(argv[2]);
      cout<<argv[3]<<":"<<puerto<<endl;
-    SocketMulticast emisor(puerto,tll);
+    SocketMulticast emisor(puerto);
     PaqueteDatagrama1 p(mensaje,menLen,argv[1],puerto);
 
     while (1)
     {
         emisor.envia(p,tll);
-        emisor.~SocketMulticast();
+        //emisor.~SocketMulticast();
     }
     
     
