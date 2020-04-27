@@ -24,9 +24,10 @@ int main (int argc, char * argv []){
     PaqueteDatagrama1 pOut((char *)numeros,menLen,argv[1],puerto);
     PaqueteDatagrama1 pIn(sizeof(int)*2);
     int r;
+      emisor.envia(pOut,tll);
     while (1)
     {
-        emisor.envia(pOut,tll);
+      
       
         r = emisor_unicast.RecibeTimeout(pIn,2,0);
         if(r!=-1){
