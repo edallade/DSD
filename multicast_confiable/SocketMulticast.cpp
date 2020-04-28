@@ -57,9 +57,7 @@ int SocketMulticast::recibeSeguro(PaqueteDatagrama1 &p,int pto,int num_depto){
         }
         else{//si se recibe de nueva cuenta el paquete 
            res = 0;
-           acr =-1;
-         //  aux  = new PaqueteDatagrama1((char *)&acr,sizeof(int),inet_ntoa(direccionForanea.sin_addr),pto+1);
-        }
+            }
         //se contesta por unicast al cliente el id recibido 
         aux  = new PaqueteDatagrama1((char *)&recibido.messageid,sizeof(int),inet_ntoa(direccionForanea.sin_addr),pto+1); 
         SocketDatagrama * response_udp = new SocketDatagrama(0);
@@ -82,19 +80,19 @@ int SocketMulticast::recibeSeguro(PaqueteDatagrama1 &p,int pto,int num_depto){
         SocketDatagrama * respuesta_destinatarios = new SocketDatagrama(p.getPort());//socket unicast para recibir respuesta
          //se envia al grupo multicast el dpto con su id
           sendto(s, (char *)p.getData(), p.getLen(), 0, (struct sockaddr *) &direccionForanea, sizeof(direccionForanea));
-        while (control < num_receptores)
+       while (control < num_receptores)
         {  
           
             //se espera respuesta de los miembros del grupo, -1 si no contestan o el acuse de cada  servidor 
-            res = respuesta_destinatarios->RecibeTimeout(*pIN, 2,0);
-         // cout<<res<<" control: " <<control<<endl;
+            res = respuesta_destinatarios->RecibeTimeout(*pIN,0,10000);
             if(id_depto==res ){
-                control++;
+              control++;
                 estado=1;
            }
-          else if (res==-1) {
-               estado= -1;
-               break;
+          else  {
+                sendto(s, (char *)p.getData(), p.getLen(), 0, (struct sockaddr *) &direccionForanea, sizeof(direccionForanea));
+              estado=-1;
+              break;
            }
 
 
