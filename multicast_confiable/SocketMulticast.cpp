@@ -53,14 +53,15 @@ int SocketMulticast::recibeSeguro(PaqueteDatagrama1 &p,int pto,int num_depto){
         }
         if(num_depto < recibido.messageid){//si no se ha recibido el paquete retorna el monto de dpto
             res = recibido.cuenta;
-            aux  = new PaqueteDatagrama1((char *)&recibido.messageid,sizeof(int),inet_ntoa(direccionForanea.sin_addr),pto+1); 
+            
         }
         else{//si se recibe de nueva cuenta el paquete 
            res = 0;
            acr =-1;
-           aux  = new PaqueteDatagrama1((char *)&acr,sizeof(int),inet_ntoa(direccionForanea.sin_addr),pto+1);
+         //  aux  = new PaqueteDatagrama1((char *)&acr,sizeof(int),inet_ntoa(direccionForanea.sin_addr),pto+1);
         }
         //se contesta por unicast al cliente el id recibido 
+        aux  = new PaqueteDatagrama1((char *)&recibido.messageid,sizeof(int),inet_ntoa(direccionForanea.sin_addr),pto+1); 
         SocketDatagrama * response_udp = new SocketDatagrama(0);
         response_udp->envia(*aux);
         response_udp->~SocketDatagrama();
