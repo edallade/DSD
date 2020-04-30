@@ -30,20 +30,20 @@ int  Solicitud::doOperation(char * ip,int puerto,int idDepto,char * arguments,in
    }
     else
     msj.requestId=consecutivo;//
-    PaqueteDatagrama1 pd((char *)&msj,sizeof(msj),ip,puerto);//se llena el datagram package a enviar
-    PaqueteDatagrama1 respuesta(sizeof(msj));//como argumento ssolo el tamaño de un mensaje(datagrampackage)
+    PaqueteDatagrama1 * pd= new PaqueteDatagrama1((char *)&msj,sizeof(msj),ip,puerto);//se llena el datagram package a enviar
+    PaqueteDatagrama1 * respuesta= new PaqueteDatagrama1(sizeof(msj));//como argumento ssolo el tamaño de un mensaje(datagrampackage)
    
    
     int retorno;
-    for(int z =0;z<7;z++){//se intentara hasta 7 veces el envio de cada paquerte 
-       if( socketLocal->envia(pd)==-1){
+    for(;;){//se intentara hasta 7 veces el envio de cada paquerte 
+       if( socketLocal->envia(*pd)==-1){
             cout<<"error al enviar \n";
        }
     
        
         //se espera respuesta del servidor
         if(socketLocal->SetDatagramTimeout(respuesta,2,0) != -1){
-        memcpy(&replay_msj,respuesta.getData(),sizeof (replay_msj));//se guardan datos del mensaje recibdo en una instancia msj local
+        memcpy(&replay_msj,respuesta->getData(),sizeof (replay_msj));//se guardan datos del mensaje recibdo en una instancia msj local
       // r=msj.arguments;//se obtiene numero del msj recibido en un a variable local
        retorno=replay_msj.requestId;
        //cout<<retorno<<"aaaaaaaaaaaaaaaaaaaaaa"<<endl;
@@ -54,10 +54,14 @@ int  Solicitud::doOperation(char * ip,int puerto,int idDepto,char * arguments,in
         if(retorno<consecutivo){
             checksum= checksum+cantidad;
             consecutivo++;
+            pd->~PaqueteDatagrama1();
+            respuesta->~PaqueteDatagrama1();
             return 1;
         }
         else
         {
+            pd->~PaqueteDatagrama1();
+            respuesta->~PaqueteDatagrama1();
             return -1;
         }
         
@@ -69,6 +73,8 @@ int  Solicitud::doOperation(char * ip,int puerto,int idDepto,char * arguments,in
       }
         
     }
+    pd->~PaqueteDatagrama1();
+            respuesta->~PaqueteDatagrama1();
     return -1;
    
     }

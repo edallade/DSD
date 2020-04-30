@@ -17,7 +17,7 @@ Respuesta::Respuesta( int port ){
 }
 
 struct mensaje * Respuesta::getRequest(){    
-    int nbd_aux[1];
+    int nbd_aux;
     PaqueteDatagrama1 * res= new PaqueteDatagrama1(sizeof(mensaje));
    mensaje  dataRecv,* aux;
     
@@ -37,8 +37,8 @@ struct mensaje * Respuesta::getRequest(){
             
         }
          if(dataRecv.requestId>consecutivo){
-           nbd_aux[0]=dataRecv.arguments;
-           nbd= nbd_aux[0]+nbd;
+           nbd_aux=dataRecv.arguments;
+           nbd= nbd_aux+nbd;
            dataRecv.requestId=consecutivo;
            consecutivo++;
           // cout<<"num recibido "<<nbd_aux[0]<<":"<<dataRecv.arguments<<"id constestar"<<dataRecv.requestId<<endl;
