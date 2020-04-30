@@ -25,14 +25,12 @@ int main(int argc, char * argv[]){
       exit(0);
     }
     int respuesta = 1;
-   PaqueteDatagrama1  p_recibido(sizeof(reg_aux));
+    PaqueteDatagrama1  p_recibido(sizeof(reg_aux));
    
        
       servidor.recibe(p_recibido);
       memcpy(&reg_aux,p_recibido.getData(),p_recibido.getLen());
       write(fd_archivo,&reg_aux,sizeof(reg_aux));
-     /* PaqueteDatagrama1 * p_respuesta = new PaqueteDatagrama1((char *)&respuesta,sizeof(respuesta),p_recibido.getAddress(),p_recibido.getPort());
-      servidor.envia(* p_respuesta);*/
      
    close(fd_archivo);
     
