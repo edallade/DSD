@@ -11,7 +11,7 @@ private:
     struct sockaddr_in DirForanea;
     int s,puerto;
     bool tipo;
-    struct timeval timeout;
+    struct timeval t;
 public:
     SocketDatagrama(char * ip,int port);
     SocketDatagrama(int);

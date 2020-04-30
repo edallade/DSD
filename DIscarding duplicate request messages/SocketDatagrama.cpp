@@ -51,9 +51,9 @@ int SocketDatagrama::recibe(PaqueteDatagrama1 & p){
 
 int SocketDatagrama::SetDatagramTimeout(PaqueteDatagrama1 &p, time_t seg, suseconds_t microseg)
 {
-    timeout.tv_sec=seg;
-    timeout.tv_usec=microseg;
-    setsockopt(s,SOL_SOCKET,SO_RCVTIMEO,(char*)&timeout,sizeof(timeout));
+    t.tv_sec=seg;
+    t.tv_usec=microseg;
+    setsockopt(s,SOL_SOCKET,SO_RCVTIMEO,(char*)&t,sizeof(t));
 
     unsigned int clilen = sizeof(DirForanea);//tamaño longitud del mensaje entrante por el socket
     //recvfrom guarda en el datagrampackage "p" los datos recibidos

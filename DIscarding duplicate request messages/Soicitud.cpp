@@ -65,7 +65,7 @@ int  Solicitud::doOperation(char * ip,int puerto,int idDepto,char * arguments,in
       }
       else{
           cout<<"servidor no respondio "<<endl;
-         return -1;
+         
       }
         
     }
