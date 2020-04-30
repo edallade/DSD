@@ -6,5 +6,5 @@ struct mensaje
    int messageType;
     int requestId;
    int operationId;
-   char arguments[MAX_LEN_DATA];
+   char arguments[sizeof(int)];
 };
