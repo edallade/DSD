@@ -21,10 +21,10 @@ int Solicitud::getCuenta(){
 }
 
 int  Solicitud::doOperation(char * ip,int puerto,int idDepto,char * arguments,int cantidad){
-    struct mensaje msj,replay_msj;
-    int r;
+     mensaje msj,replay_msj;
+  
+    msj.arguments=cantidad;
     
-    memcpy(msj.arguments,arguments,sizeof(arguments));
     if(idDepto==-1){
     msj.requestId=idDepto;
    }
@@ -34,22 +34,24 @@ int  Solicitud::doOperation(char * ip,int puerto,int idDepto,char * arguments,in
     PaqueteDatagrama1 respuesta(sizeof(msj));//como argumento ssolo el tamaño de un mensaje(datagrampackage)
    
    
-    int retorno[1];
+    int retorno;
     for(int z =0;z<7;z++){//se intentara hasta 7 veces el envio de cada paquerte 
        if( socketLocal->envia(pd)==-1){
             cout<<"error al enviar \n";
        }
+    
+       
         //se espera respuesta del servidor
         if(socketLocal->SetDatagramTimeout(respuesta,2,0) != -1){
         memcpy(&replay_msj,respuesta.getData(),sizeof (replay_msj));//se guardan datos del mensaje recibdo en una instancia msj local
-        memcpy(&r,&replay_msj.arguments,sizeof(r));//se obtiene numero del msj recibido en un a variable local
-       retorno[0]=replay_msj.requestId;
-       
-        if(retorno[0]==-1){
+      // r=msj.arguments;//se obtiene numero del msj recibido en un a variable local
+       retorno=replay_msj.requestId;
+       //cout<<retorno<<"aaaaaaaaaaaaaaaaaaaaaa"<<endl;
+        if(retorno==-1){
             return 0;
 
         }
-        if(retorno[0]<consecutivo){
+        if(retorno<consecutivo){
             checksum= checksum+cantidad;
             consecutivo++;
             return 1;
@@ -67,6 +69,7 @@ int  Solicitud::doOperation(char * ip,int puerto,int idDepto,char * arguments,in
       }
         
     }
+    return -1;
    
     }
         

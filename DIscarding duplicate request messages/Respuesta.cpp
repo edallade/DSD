@@ -16,18 +16,19 @@ Respuesta::Respuesta( int port ){
     consecutivo=0;
 }
 
-struct mensaje* Respuesta::getRequest(){    
-    int nbd_aux;
-    PaqueteDatagrama1 res(sizeof(mensaje));
-    struct mensaje  dataRecv,* aux;
+struct mensaje * Respuesta::getRequest(){    
+    int nbd_aux[1];
+    PaqueteDatagrama1 * res= new PaqueteDatagrama1(sizeof(mensaje));
+   mensaje  dataRecv,* aux;
     
-    ServerSocket->recibe(res);
+    ServerSocket->recibe(*res);
 
-        memcpy(&dataRecv,res.getData(),sizeof(dataRecv) );
-        port = res.getPort();
-        memcpy(ip,res.getAddress(),sizeof(ip));
+        memcpy(&dataRecv,res->getData(),sizeof(dataRecv) );
+        port = res->getPort();
+       // cout<<"ADRESS"<<res->getAddress();
+        memcpy(ip,res->getAddress(),sizeof(ip));
        // memcpy(&idDepto_recibido,&dataRecv.requestId,(idDepto_recibido));
-     
+    // cout<<dataRecv.requestId<<" id local" <<consecutivo<<endl;
          if(dataRecv.requestId==-1)
         {
             cout<<"cuenta final en el servidor "<<nbd<<endl;
@@ -36,26 +37,31 @@ struct mensaje* Respuesta::getRequest(){
             
         }
          if(dataRecv.requestId>consecutivo){
-           memcpy(&nbd_aux,&dataRecv.arguments,sizeof(nbd_aux));
-           nbd= nbd_aux+nbd;
+           nbd_aux[0]=dataRecv.arguments;
+           nbd= nbd_aux[0]+nbd;
            dataRecv.requestId=consecutivo;
            consecutivo++;
-           
+          // cout<<"num recibido "<<nbd_aux[0]<<":"<<dataRecv.arguments<<"id constestar"<<dataRecv.requestId<<endl;
          }
        
         
-        memcpy(dataRecv.arguments,&nbd,sizeof(nbd));      
+        //memcpy(dataRecv.arguments,(char *)&nbd,sizeof(nbd));      
+       
+        
+       PaqueteDatagrama1 * rep = new PaqueteDatagrama1((char *)&dataRecv,sizeof(mensaje),ip,port);
+        ServerSocket->envia(*rep);
+        res->~PaqueteDatagrama1();
+        rep->~PaqueteDatagrama1();
         aux = &dataRecv;
         return aux;
-
         }
   
    
     
 
-void Respuesta::sendReply(struct mensaje * replay){
+void Respuesta::sendReply(struct mensaje replay){
            
-       PaqueteDatagrama1 rep ((char *)replay,sizeof(mensaje),ip,port);
-        ServerSocket->envia(rep);
+       
+     
 }
 

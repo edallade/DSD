@@ -66,10 +66,11 @@ int SocketDatagrama::SetDatagramTimeout(PaqueteDatagrama1 &p, time_t seg, suseco
      }
      else{
          if(errno==EWOULDBLOCK){
-            //cout<<"Tiempo de espera de respuesta excedido\n";
+            cout<<"Tiempo de espera de respuesta excedido\n";
              return -1;
          }
          else{
+             cout<<"error en recfrom\n";
              return -1;
          }
          
