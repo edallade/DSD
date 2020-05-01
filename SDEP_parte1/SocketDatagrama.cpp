@@ -59,14 +59,14 @@ int SocketDatagrama::SetDatagramTimeout(PaqueteDatagrama1 &p, time_t seg, suseco
     //recvfrom guarda en el datagrampackage "p" los datos recibidos
     int ret = recvfrom(s,(char *) p.getData(),p.getLen(),0,(struct sockaddr *)&DirForanea,&clilen);
      if(ret>0){
-     
+        
         p.setIp(inet_ntoa(DirForanea.sin_addr));
         p.setPort(ntohs(DirForanea.sin_port));
         return ret;
      }
      else{
          if(errno==EWOULDBLOCK){
-            cout<<"Tiempo de espera de respuesta excedido\n";
+            //cout<<"Tiempo de espera de respuesta excedido\n";
              return -1;
          }
          else{

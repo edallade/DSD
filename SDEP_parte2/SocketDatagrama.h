@@ -13,7 +13,6 @@ private:
     bool tipo;
     struct timeval t;
 public:
-    SocketDatagrama(char * ip,int port);
     SocketDatagrama(int);
     ~SocketDatagrama();
 //Recibe un paquete tipo datagrama proveniente de este socket

@@ -44,9 +44,7 @@ int  Solicitud::doOperation(char * ip,int puerto,int idDepto,char * arguments,in
         //se espera respuesta del servidor
         if(socketLocal->SetDatagramTimeout(respuesta,2,0) != -1){
         memcpy(&replay_msj,respuesta.getData(),sizeof (replay_msj));//se guardan datos del mensaje recibdo en una instancia msj local
-      // r=msj.arguments;//se obtiene numero del msj recibido en un a variable local
-       retorno=replay_msj.requestId;
-       //cout<<retorno<<"aaaaaaaaaaaaaaaaaaaaaa"<<endl;
+        retorno=replay_msj.requestId;
         if(retorno==-1){
             return 0;
 
@@ -65,7 +63,7 @@ int  Solicitud::doOperation(char * ip,int puerto,int idDepto,char * arguments,in
       }
       else{
           cout<<"servidor no respondio "<<endl;
-         return -1;
+         
       }
         
     }

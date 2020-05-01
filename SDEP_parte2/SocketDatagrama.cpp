@@ -12,17 +12,6 @@
 
 using namespace std;
 
-
-SocketDatagrama::SocketDatagrama(char * ip,int port){
-    s = socket(AF_INET,SOCK_DGRAM,0);
-        bzero((char *)&DirForanea,sizeof(DirForanea));
-        DirForanea.sin_family=AF_INET;
-        DirForanea.sin_addr.s_addr=inet_addr(ip);
-        DirForanea.sin_port=htons(port);
-
-
-}
-
 SocketDatagrama::SocketDatagrama(int port){
      puerto= port;
     s = socket(AF_INET,SOCK_DGRAM,0);
@@ -39,11 +28,8 @@ SocketDatagrama::~SocketDatagrama(){
 }
 int SocketDatagrama::recibe(PaqueteDatagrama1 & p){
 
-    unsigned int clilen = sizeof(DirForanea);//tamaño longitud del mensaje entrante por el socket
-    //recvfrom guarda en el datagrampackage "p" los datos recibidos
-    
+    unsigned int clilen = sizeof(DirForanea);//tamaño longitud del mensaje entrante por el socket 
     int ret = recvfrom(s,(char *) p.getData(),p.getLen(),0,(struct sockaddr *)&DirForanea,&clilen);
-     
     p.setIp(inet_ntoa(DirForanea.sin_addr));
     p.setPort(ntohs(DirForanea.sin_port));
     return ret;
@@ -81,12 +67,12 @@ int SocketDatagrama::SetDatagramTimeout(PaqueteDatagrama1 &p, time_t seg, suseco
 }
 
 int SocketDatagrama::envia(PaqueteDatagrama1 & p){
-        //se envia al destino Dirfonranea 
-         bzero((char *)&DirForanea, sizeof(DirForanea));
+         
+    bzero((char *)&DirForanea, sizeof(DirForanea));
     DirForanea.sin_family = AF_INET;
     DirForanea.sin_addr.s_addr = inet_addr(p.getAddress());
-   	DirForanea.sin_port = htons( p.getPort() );
-      return sendto(s, (char*) p.getData(), p.getLen() , 0, (struct sockaddr*) &DirForanea, sizeof(DirForanea));
+   	DirForanea.sin_port = htons( p.getPort() );   
+    return sendto(s, (char*) p.getData(), p.getLen() , 0, (struct sockaddr*) &DirForanea, sizeof(DirForanea));
 
 }
 
