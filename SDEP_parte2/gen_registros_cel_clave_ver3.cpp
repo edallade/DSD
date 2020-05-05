@@ -62,6 +62,7 @@ int main(int argc, char *argv[]){
 
 	//Aleatoriza el vector de registros e imprime el resultado
 	random_shuffle(registros_vector.begin(), registros_vector.end());
+	
 	if((fd_archivo=open(argv[2],O_WRONLY|O_CREAT|O_TRUNC,0666))==-1)
 	{
 		perror(argv[2]);
