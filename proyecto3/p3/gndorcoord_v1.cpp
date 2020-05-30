@@ -23,11 +23,10 @@ struct Mensaje{
      double coord[2];
     int messageType;//0= Solicitud, 1 = Respuesta
     int requestId;//Identificador del mensaje
-    //int operationId;//Identificador de la operación
-    //char arguments[TAM_MAX_DATA]; 
+    
 };
 
-void pintar(){
+void pintar(char * ip){
  while (1)
  {
 
@@ -46,7 +45,7 @@ void pintar(){
 
     bzero((char*)&msg_to_srv_addr,sizeof(msg_to_srv_addr));
     msg_to_srv_addr.sin_family = AF_INET;
-    msg_to_srv_addr.sin_addr.s_addr=inet_addr("127.0.0.1");
+    msg_to_srv_addr.sin_addr.s_addr=inet_addr(ip);
     msg_to_srv_addr.sin_port=htons(pto);
 
     bzero((char*)&client_addr,sizeof(client_addr));
@@ -57,14 +56,16 @@ void pintar(){
     bind(s,(struct sockaddr *)&client_addr,sizeof(client_addr));
 
     clilen = sizeof(client_addr);
-   // coord[0] = x,  coord[1] = y;                  0.0125 para el real 
+   // coord[0] = x,  coord[1] = y;                 
     for( coord[0] = -5;coord[0]<=5;coord[0]=coord[0]+0.0125){
-        for (double n= 1;n<=n_terminos;n++) {//3 equivale al numero de terminos de la serie 
+        for (double n= 1;n<=n_terminos;n++) {
             angulo = ((pi+pi)*n*coord[0])/static_cast<double>(5);
             coord[1] = coord[1] + (static_cast<double>(1)/n)*(sin(angulo));
           }
             coord[1] = 2.5+((static_cast<double>(-5)/pi)*coord[1]);
             mensaje.coord[0] = coord[0];mensaje.coord[1]=coord[1];
+
+            
             sendto(s,(struct Mensaje *)&mensaje,sizeof(mensaje),0,(struct sockaddr *)&msg_to_srv_addr,sizeof(msg_to_srv_addr));
             
             recvfrom(s,(char *)&res,sizeof(int),0,(struct sockaddr *)&client_addr,&clilen);
@@ -80,7 +81,7 @@ void pintar(){
 
 
 
-void borrar(){
+void borrar(char * ip){
 
 while (1)
 {
@@ -102,7 +103,7 @@ while (1)
 
     bzero((char*)&msg_to_srv_addr,sizeof(msg_to_srv_addr));
     msg_to_srv_addr.sin_family = AF_INET;
-    msg_to_srv_addr.sin_addr.s_addr=inet_addr("127.0.0.1");
+    msg_to_srv_addr.sin_addr.s_addr=inet_addr(ip);
     msg_to_srv_addr.sin_port=htons(pto);
 
    bzero((char*)&client_addr,sizeof(client_addr));
@@ -138,11 +139,14 @@ while (1)
 }
 
 
-int main(){//Inicializa los semaforos
-    
+int main(int argc, char *argv[]){
+    if(argc != 2){
+      cout<<"Modo de uso : "<<argv[0]<<" ip del servidor"<<endl;
+      exit(-1);
+    }
   sem1.init(1);
     sem2.init(0);
-    thread th1(pintar), th2(borrar);
+    thread th1(pintar,argv[1]), th2(borrar,argv[1]);
     th1.join();
     th2.join();
     
