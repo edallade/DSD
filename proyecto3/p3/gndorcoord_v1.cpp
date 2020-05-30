@@ -34,17 +34,18 @@ void pintar(char * ip){
     Mensaje mensaje;
     struct sockaddr_in msg_to_srv_addr,client_addr;
     struct timeval timeout;
-    int s, num,res,cond;
+    int s, num,res;
     double coord[2];
     double angulo;
   
-    cond=-1;
     mensaje.messageType=1;
     mensaje.requestId=0;
     unsigned int clilen;
 
     s = socket(AF_INET,SOCK_DGRAM,0);
-
+ timeout.tv_sec=1;
+    timeout.tv_usec=10000;
+    setsockopt(s,SOL_SOCKET,SO_RCVTIMEO,(char *)&timeout,sizeof(timeout));
     bzero((char*)&msg_to_srv_addr,sizeof(msg_to_srv_addr));
     msg_to_srv_addr.sin_family = AF_INET;
     msg_to_srv_addr.sin_addr.s_addr=inet_addr(ip);
@@ -56,9 +57,7 @@ void pintar(char * ip){
     client_addr.sin_port=htons(7000);
 
     bind(s,(struct sockaddr *)&client_addr,sizeof(client_addr));
-    timeout.tv_sec=1;
-    timeout.tv_usec=10000;
-    setsockopt(s,SOL_SOCKET,SO_RCVTIMEO,(char *)&timeout,sizeof(timeout));
+   
     clilen = sizeof(client_addr);
    // coord[0] = x,  coord[1] = y;                 
     for( coord[0] = -5;coord[0]<=5;coord[0]=coord[0]+0.0125){
@@ -70,13 +69,9 @@ void pintar(char * ip){
             mensaje.coord[0] = coord[0];mensaje.coord[1]=coord[1];
 
             
-           while (cond<0)
-           {
-             sendto(s,(struct Mensaje *)&mensaje,sizeof(mensaje),0,(struct sockaddr *)&msg_to_srv_addr,sizeof(msg_to_srv_addr));
+            sendto(s,(struct Mensaje *)&mensaje,sizeof(mensaje),0,(struct sockaddr *)&msg_to_srv_addr,sizeof(msg_to_srv_addr));
             
-            cond = recvfrom(s,(char *)&res,sizeof(int),0,(struct sockaddr *)&client_addr,&clilen);
-           }
-           
+            recvfrom(s,(char *)&res,sizeof(int),0,(struct sockaddr *)&client_addr,&clilen);
 
              coord[1]=0;
      
@@ -99,17 +94,18 @@ while (1)
    sem2.wait();
    Mensaje mensaje;
    struct sockaddr_in msg_to_srv_addr,client_addr;
-    struct timeval timeout;
    int s, num,res;
    double coord[2];
    double angulo;
-  int cond = -1;
+  struct timeval timeout;
    mensaje.messageType=0;
    mensaje.requestId=0;
    unsigned int clilen;
 
     s = socket(AF_INET,SOCK_DGRAM,0);
-
+    timeout.tv_sec=1;
+    timeout.tv_usec=10000;
+    setsockopt(s,SOL_SOCKET,SO_RCVTIMEO,(char *)&timeout,sizeof(timeout));
     bzero((char*)&msg_to_srv_addr,sizeof(msg_to_srv_addr));
     msg_to_srv_addr.sin_family = AF_INET;
     msg_to_srv_addr.sin_addr.s_addr=inet_addr(ip);
@@ -121,9 +117,6 @@ while (1)
     client_addr.sin_port=htons(7200);
 
     bind(s,(struct sockaddr *)&client_addr,sizeof(client_addr));
-      timeout.tv_sec=1;
-    timeout.tv_usec=10000;
-    setsockopt(s,SOL_SOCKET,SO_RCVTIMEO,(char *)&timeout,sizeof(timeout));
 
  clilen = sizeof(client_addr);
    
@@ -135,12 +128,9 @@ while (1)
           }
             coord[1] = 2.5+((static_cast<double>(-5)/pi)*coord[1]);
             mensaje.coord[0] = coord[0];mensaje.coord[1]=coord[1];
-             while (cond<0)
-           {
-             sendto(s,(struct Mensaje *)&mensaje,sizeof(mensaje),0,(struct sockaddr *)&msg_to_srv_addr,sizeof(msg_to_srv_addr));
-            
-            cond = recvfrom(s,(char *)&res,sizeof(int),0,(struct sockaddr *)&client_addr,&clilen);
-           }
+            sendto(s,(struct Mensaje *)&mensaje,sizeof(mensaje),0,(struct sockaddr *)&msg_to_srv_addr,sizeof(msg_to_srv_addr));
+          
+            recvfrom(s,(char *)&res,sizeof(int),0,(struct sockaddr *)&client_addr,&clilen);
 
              coord[1]=0;
      
