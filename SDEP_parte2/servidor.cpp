@@ -22,7 +22,7 @@ int main(int argc, char * argv[]){
   int fd_archivo;
   mensaje mjs;
   registro reg_aux;
-  vector<struct registro>registros;
+  //vector<struct registro>registros;
   vector<struct registro>::iterator it;
   if((fd_archivo=open(argv[1],O_WRONLY|O_CREAT|O_TRUNC,0666))==-1){
       perror(argv[1]);
@@ -39,8 +39,8 @@ int main(int argc, char * argv[]){
      break;
    if(mjs.requestId>control){
      memcpy(&reg_aux,(char *)&mjs.arguments,sizeof(reg_aux));
-     //write(fd_archivo,&reg_aux,sizeof(reg_aux));
-     registros.push_back(reg_aux);
+     write(fd_archivo,&reg_aux,sizeof(reg_aux));
+    // registros.push_back(reg_aux);
     mjs.requestId=control;
     control++;
     
@@ -53,10 +53,10 @@ int main(int argc, char * argv[]){
  
     
   }  
-  for(it=registros.begin();it!=registros.end();it++){
+ /* for(it=registros.begin();it!=registros.end();it++){
     reg_aux=*it;
     write(fd_archivo,&reg_aux,sizeof(reg_aux));
-  }
+  }*/
   close(fd_archivo);
     
   

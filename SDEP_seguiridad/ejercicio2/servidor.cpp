@@ -52,7 +52,7 @@ int main(int argc, char * argv[]){
     
      if(binary_search(celulares.begin(),celulares.end(),cel_temp)==false){
         celulares.push_back(cel_temp);
-       // sort(celulares.begin(),celulares.end());
+       sort(celulares.begin(),celulares.end());
   
         gettimeofday(&timestamp,NULL);
         localtime(&timestamp.tv_usec);
